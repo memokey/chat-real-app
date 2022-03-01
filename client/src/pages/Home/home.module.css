@@ -1,0 +1,35 @@
+.cardWrappper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+}
+
+
+.para {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #c4c5c5;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+
+.signinnWrapper{
+  margin-top: 20px;
+}
+
+.invite{
+  color: #014a9c;
+}
+
+
+
+
+
+
+
+
+
+
+

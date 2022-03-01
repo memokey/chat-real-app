@@ -1,0 +1,173 @@
+import "./App.css";
+import {  Switch, Route, Redirect } from 'react-router-dom';
+import { Fragment } from "react";
+import Home from "./pages/Home/Home";
+import Navigation from './components/shared/Navigation/Navigation';
+import Authenticate from './pages/Authenticate/Authennticate';
+import Activate from './pages/Activate/Activate';
+import Room from './pages/Room/Room';
+import { ToastContainer } from 'react-toastify';
+import {useSelector} from 'react-redux';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
+function App() {
+  return (
+    <Fragment>
+      <ToastContainer />
+      
+      <Navigation />
+      <Switch>
+    
+        <GuestRoute exact path="/">
+          <Home />
+        </GuestRoute>
+        
+        <GuestRoute path="/authenticate">
+              <Authenticate />
+        </GuestRoute>
+
+        <SemiProtectedRoute path="/activate">
+              <Activate />
+        </SemiProtectedRoute>
+
+
+        <Route path="/authenticate" component={Authenticate} />
+
+        <ProtectedRoute path="/rooms">
+            <Room />
+        </ProtectedRoute>
+      </Switch>
+    </Fragment>
+  );
+}
+
+
+
+const GuestRoute = ({ children, ...rest }) => {
+  const { isAuth } = useSelector((state) => state.auth);
+  return (
+      <Route
+          {...rest}
+          render={({ location }) => {
+              return isAuth ? (
+                  <Redirect
+                      to={{
+                          pathname: '/rooms',
+                          state: { from: location },
+                      }}
+                  />
+              ) : (
+                  children
+              );
+          }}
+      ></Route>
+  );
+};
+
+const SemiProtectedRoute = ({ children, ...rest }) => {
+  const { user, isAuth } = useSelector((state) => state.auth);
+  return (
+      <Route
+          {...rest}
+          render={({ location }) => {
+              return !isAuth ? (
+                  <Redirect
+                      to={{
+                          pathname: '/',
+                          state: { from: location },
+                      }}
+                  />
+              ) : isAuth && !user.activated ? (
+                  children
+              ) : (
+                  <Redirect
+                      to={{
+                          pathname: '/rooms',
+                          state: { from: location },
+                      }}
+                  />
+              );
+          }}
+      ></Route>
+  );
+};
+
+const ProtectedRoute = ({ children, ...rest }) => {
+  const { user, isAuth } = useSelector((state) => state.auth);
+  return (
+      <Route
+          {...rest}
+          render={({ location }) => {
+              return !isAuth ? (
+                  <Redirect
+                      to={{
+                          pathname: '/',
+                          state: { from: location },
+                      }}
+                  />
+              ) : isAuth && !user.activated ? (
+                  <Redirect
+                      to={{
+                          pathname: '/activate',
+                          state: { from: location },
+                      }}
+                  />
+              ) : (
+                  children
+              );
+          }}
+      ></Route>
+  );
+};
+
+
+
+export default App;
+
+-- 
+
+import React, { Fragment } from "react";
+import Card from "../../components/shared/Card/Card";
+import style from "./home.module.css";
+import { Link, useHistory } from "react-router-dom";
+import Button from '../../components/shared/Button/Button';
+
+export default function Home() {
+  const signnInLinkStyle = {
+    color: '#0077ff',
+    fontWeight:'bold',
+    textDecoration:'none',
+    marginLeft:'20px'
+  }
+
+  const history = useHistory();
+
+  const startRegistration = ()=>{
+    history.push('/authenticate')
+  }
+
+  return (
+    <Fragment>
+      <div className={style.cardWrappper}>
+        <Card title="Welcome to voice chatting system" icon="kk">
+          <p className={style.para}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi
+            maxime voluptates architecto deserunt aut? Voluptatum iure
+            distinctio neque voluptates vel?
+          </p>
+
+          <div>
+            <Button onClick={startRegistration} label="Let's Go" />
+          </div>
+
+          <div className={style.signinnWrapper}>
+            <span className={style.invite}>Have an invite text?</span>
+            <Link to="/authenticate" style={signnInLinkStyle}>SignIn</Link>
+          </div>
+        </Card>
+      </div>
+    </Fragment>
+  );
+}

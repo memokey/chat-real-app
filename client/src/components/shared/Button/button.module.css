@@ -1,0 +1,45 @@
+.button{
+    background: #0077ff;
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    color: #fff;
+    font-size:18px;
+    font-weight: bold;
+    border-radius: 50px;
+}
+.msgbutton {
+    background: #0077ff;
+    cursor: pointer;
+    padding: 5px 5px;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    color: #fff;
+    font-size:18px;
+    font-weight: bold;
+    border-radius: 50px;
+}
+.msgbutton:hover {
+    background: #014a9c;
+}
+
+
+.button:hover{
+    background: #014a9c;
+}
+
+
+.arrow {
+    margin-left: 10px;
+}
+.send {
+    width: 30px;
+    height: 30px;
+}
